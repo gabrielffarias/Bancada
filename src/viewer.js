@@ -200,7 +200,13 @@ export class Viewer {
     if (!this.model) return;
     const parts = this.model.parts;
     const has = (id) => parts.has(id);
-    const wanted = open.filter(has);
+    // peça cujo pai se move e está fechado não pode ficar aberta (ex.: tampa do fusor com o fusor recolhido)
+    const want0 = new Set(open.filter(has));
+    const wanted = open.filter((id) => {
+      if (!has(id)) return false;
+      for (let q = parts.get(id).parentPart; q; q = q.parentPart) if (q.def.motion && !want0.has(q.def.id)) return false;
+      return true;
+    });
     const wantSet = new Set(wanted);
     const now = this.clock.elapsedTime;
     let t = 0;

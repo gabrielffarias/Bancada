@@ -70,7 +70,7 @@ export default {
         s('Localize o papel', 'O papel costuma ficar preso na entrada ou na saída do fusor.',
           { highlight: ['fuser'], focus: 'fuser', view: 'rear' }),
         s('Remova com cuidado', 'Puxe a folha devagar, no sentido do caminho do papel, para não rasgar e deixar pedaço lá dentro.',
-          { ghost: ['fuser'], highlight: ['heat-roller', 'pressure-roller'], focus: 'fuser', view: 'rear' }),
+          { ghost: ['fuser', 'fuser-cover'], highlight: ['heat-roller', 'pressure-roller'], focus: 'fuser', view: 'rear' }),
         s('Feche a tampa', 'Feche a tampa traseira. O painel deve liberar a máquina.',
           { close: ['rearCover'], highlight: ['rearCover'], focus: 'rearCover', view: 'rear' }),
       ],

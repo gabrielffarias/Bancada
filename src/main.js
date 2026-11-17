@@ -9,6 +9,7 @@ const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g
 const state = { printer: null, code: null, step: 0, query: '' };
 
 const viewer = new Viewer($('#stage'), { onPick: showPick });
+window.bancada = viewer; // para depuração no console
 
 // ---------- Navegação ----------
 function selectPrinter(id, { silent = false } = {}) {

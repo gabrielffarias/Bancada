@@ -246,15 +246,24 @@ export function mfp(options = {}) {
   const out = along === 'x' ? -0.25 : 0.25; // lado de onde o técnico puxa
   const fuser = add({ id: 'fuser', name: N('fuser', 'Unidade fusora (fusor)'), kind: 'internal', origin: fp,
     meshes: [
-      rbox(sz(L, 0.5, 0.62), fp, '#3a3d43', { radius: 0.06, mat: 'metal', metal: 0.35, rough: 0.5 }),
+      // carcaça aberta em cima (a tampa fecha), para dar pra ver os rolos na bancada
+      rbox(sz(L, 0.08, 0.62), at(0, -0.21, 0), '#3a3d43', { radius: 0.03, mat: 'metal', metal: 0.35, rough: 0.5 }),
+      rbox(sz(L, 0.5, 0.06), at(0, 0, 0.28), '#3a3d43', { radius: 0.025, mat: 'metal', metal: 0.35, rough: 0.5 }),
+      rbox(sz(L, 0.5, 0.06), at(0, 0, -0.28), '#3a3d43', { radius: 0.025, mat: 'metal', metal: 0.35, rough: 0.5 }),
+      rbox(sz(0.06, 0.5, 0.62), at(-L / 2 + 0.03, 0, 0), '#3a3d43', { radius: 0.025, mat: 'metal', metal: 0.35, rough: 0.5 }),
+      rbox(sz(0.06, 0.5, 0.62), at(L / 2 - 0.03, 0, 0), '#3a3d43', { radius: 0.025, mat: 'metal', metal: 0.35, rough: 0.5 }),
       rbox(sz(0.14, 0.26, 0.32), at(-L / 2 - 0.05, 0.08, out), c.handle, { radius: 0.05 }),
       rbox(sz(0.14, 0.26, 0.32), at(L / 2 + 0.05, 0.08, out), c.handle, { radius: 0.05 }),
       gear(0.2, along, at(L / 2 + 0.02, 0.1, 0.05), WHITE_NYLON, { depth: 0.05 }),
-      rbox(sz(0.22, 0.1, 0.14), at(-L / 2 + 0.3, 0.3, 0), WHITE_NYLON, { radius: 0.02 }),
+      rbox(sz(0.22, 0.12, 0.1), at(-L / 2 + 0.3, 0.1, out * 1.3), WHITE_NYLON, { radius: 0.02 }),
       slots(6, sz(L * 0.12, 0.012, 0.02), along === 'x' ? [L * 0.15, 0, 0] : [0, 0, L * 0.15], at(0, 0.18, out * 1.24), '#1a1c20'),
     ],
     motion: { type: 'slide', to: along === 'x' ? [0, 0.25, -d * 0.9] : [w * 0.85, 0.25, 0] } });
-  if (c.fuserScrews) screwsFor(fuser, [-1, 1].map((s) => [at(s * (L / 2 - 0.1), 0.27, out * 0.6), [0, 1, 0]]));
+  // Tampa do fusor: só se abre na bancada, depois que o fusor está fora (2 parafusos)
+  const fcover = add({ id: 'fuser-cover', name: N('fuser-cover', 'Tampa do fusor'), kind: 'detail', parent: 'fuser', origin: at(0, 0.3, 0),
+    meshes: [rbox(sz(L * 0.94, 0.08, 0.56), at(0, 0.3, 0), '#44484f', { radius: 0.03, mat: 'metal', metal: 0.35, rough: 0.5 })],
+    motion: { type: 'slide', to: along === 'x' ? [0, 0.35, -0.95] : [0.95, 0.35, 0] } });
+  fcover.screws = [-1, 1].map((s, i) => screw(`fuser-cover-s${i + 1}`, at(s * (L * 0.47 - 0.1), 0.34, 0), [0, 1, 0], 'fuser').id);
   add({ id: 'heat-roller', name: N('heat-roller', 'Rolo de aquecimento'), kind: 'detail', parent: 'fuser',
     meshes: [cyl(0.13, L * 0.92, along, at(0, 0.1, 0.05), '#a36f3c', { mat: 'metal', metal: 0.5, rough: 0.3 })] });
   add({ id: 'pressure-roller', name: N('pressure-roller', 'Rolo de pressão'), kind: 'detail', parent: 'fuser',
@@ -262,10 +271,10 @@ export function mfp(options = {}) {
   add({ id: 'heater', name: N('heater', 'Lâmpada aquecedora'), kind: 'detail', parent: 'fuser',
     meshes: [cyl(0.04, L * 0.9, along, at(0, 0.1, 0.05), '#ff4a2a', { mat: 'glow' })] });
   add({ id: 'thermistor', name: N('thermistor', 'Termistor'), kind: 'detail', parent: 'fuser',
-    meshes: [box(sz(0.12, 0.05, 0.08), at(L * 0.18, 0.26, 0.05), '#ffd23f'),
-      tube([at(L * 0.18, 0.28, 0.05), at(L * 0.05, 0.36, 0.08), at(-L / 2 + 0.3, 0.33, 0)], 0.012, '#e8e8e8')] });
+    meshes: [box(sz(0.12, 0.04, 0.08), at(L * 0.18, 0.24, 0.05), '#ffd23f'),
+      tube([at(L * 0.18, 0.245, 0.05), at(0, 0.245, out * 0.9), at(-L / 2 + 0.3, 0.12, out * 1.25)], 0.012, '#e8e8e8')] });
   add({ id: 'thermostat', name: N('thermostat', 'Termostato de segurança'), kind: 'detail', parent: 'fuser',
-    meshes: [cyl(0.06, 0.06, 'y', at(-L * 0.18, 0.27, 0.05), STEEL, { mat: 'metal' })] });
+    meshes: [cyl(0.06, 0.04, 'y', at(-L * 0.18, 0.245, 0.05), STEEL, { mat: 'metal' })] });
 
   add({ id: 'feed-roller', name: N('feed-roller', 'Rolo de alimentação (pickup)'), kind: 'internal', meshes: [
     cyl(0.11, 0.5, 'x', [0, eb + 0.13, hd - 0.75], RUBBER, { mat: 'rubber' }),
@@ -301,7 +310,7 @@ export function mfp(options = {}) {
     ] });
   // Fonte com ventoinha e chicote até o fusor
   const sx = -w * 0.2, sy = eb + 0.28, sz2 = -hd + 0.42;
-  const fuserPlug = at(-L / 2 + 0.3, 0.32, 0);
+  const fuserPlug = at(-L / 2 + 0.3, 0.1, out * 1.4);
   add({ id: 'psu', name: N('psu', 'Fonte / placa de força'), kind: 'internal', origin: [sx, sy, sz2],
     meshes: [
       box([w * 0.36, 0.34, d * 0.32], [sx, sy, sz2], '#a9b0b9', { mat: 'metal', rough: 0.45 }),

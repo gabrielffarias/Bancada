@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bancada · Guia 3D de manutenção de impressoras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="src/styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <header class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M6 11l10-6 10 6v10l-10 6-10-6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 11l10 6 10-6M16 17v10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2.5 2.5"/></svg>
+        </div>
+        <div>
+          <h1>Bancada</h1>
+          <p>Guia 3D de manutenção de impressoras</p>
+        </div>
+      </header>
+
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="search" type="search" placeholder="Código de erro: C6000, 092-318, E000…" autocomplete="off" spellcheck="false" />
+      </label>
+
+      <section>
+        <h2>Equipamentos</h2>
+        <div id="printers" class="printers"></div>
+      </section>
+
+      <section class="codes-section">
+        <h2 id="codes-title">Códigos de erro</h2>
+        <div id="codes" class="codes"></div>
+      </section>
+    </aside>
+
+    <main class="stage-wrap">
+      <div id="stage" class="stage"></div>
+
+      <div class="stage-top">
+        <div id="machine-chip" class="chip machine"></div>
+        <div class="tools">
+          <button id="btn-xray" class="tool" title="Raio-X: carcaça transparente" aria-pressed="false">Raio-X</button>
+          <button id="btn-explode" class="tool" title="Vista explodida" aria-pressed="false">Explodir</button>
+          <button id="btn-rotate" class="tool" title="Girar sozinho" aria-pressed="false">Girar</button>
+          <button id="btn-reset" class="tool" title="Centralizar câmera">Centralizar</button>
+        </div>
+      </div>
+
+      <div id="pick-info" class="pick-info" hidden></div>
+
+      <div id="step-card" class="step-card"></div>
+    </main>
+
+    <aside id="detail" class="detail"></aside>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
